@@ -11,7 +11,7 @@ export const Skeleton = () => (
 		backgroundColor='#f3f3f3'
 		foregroundColor='#ecebeb'
 	>
-		<circle cx='127' cy='121' r='118' />
+		<circle cx='135' cy='120' r='118' />
 		<rect x='0' y='258' rx='10' ry='10' width='280' height='24' />
 		<rect x='0' y='307' rx='16' ry='16' width='280' height='83' />
 		<rect x='0' y='422' rx='10' ry='10' width='89' height='27' />

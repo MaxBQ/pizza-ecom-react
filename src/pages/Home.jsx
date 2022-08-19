@@ -9,6 +9,7 @@ export const Home = () => {
 	const [isLodging, setIsLodging] = React.useState(true);
 
 	React.useEffect(() => {
+		window.scrollTo(0, 0);
 		const controller = new AbortController();
 		const signal = controller.signal;
 		fetch("https://62fe4b6ba85c52ee48347486.mockapi.io/items", { signal })
