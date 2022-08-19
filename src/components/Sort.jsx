@@ -1,14 +1,21 @@
 import React from "react";
 
-export const Sort = () => {
+export const Sort = (props) => {
+	const { sortName, onClickSort } = props;
 	const [isOpen, setIsOpen] = React.useState(false);
-	const [activeList, setActiveList] = React.useState(0);
 
-	const sortLists = ["популярности", "цене", "алфавиту"];
-	const sortName = sortLists[activeList];
+	const sortLists = [
+		{ name: "популярности(ASC)", sortProperty: "rating" },
+		{ name: "популярности(DESC)", sortProperty: "-rating" },
+		{ name: "цене(ASC)", sortProperty: "price" },
+		{ name: "цене(DESC)", sortProperty: "-price" },
+		{ name: "алфавиту(ASC)", sortProperty: "title" },
+		{ name: "алфавиту(DESC)", sortProperty: "-title" },
+	];
+	// const sortName = sortLists[activeList];
 
 	const onClickSelectedList = (index) => () => {
-		setActiveList(index);
+		onClickSort(index);
 		setIsOpen(false);
 	};
 
@@ -35,11 +42,11 @@ export const Sort = () => {
 					<ul>
 						{sortLists.map((list, index) => (
 							<li
-								onClick={onClickSelectedList(index)}
-								className={activeList === index ? "active" : ""}
+								onClick={onClickSelectedList(list)}
+								className={sortName === list.name ? "active" : ""}
 								key={index}
 							>
-								{list}
+								{list.name}
 							</li>
 						))}
 					</ul>
