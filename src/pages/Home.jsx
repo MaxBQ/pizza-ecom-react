@@ -1,13 +1,16 @@
 import React from "react";
 import { Categories } from "../components/Categories";
+import { Pagination } from "../components/Pagination";
 import { PizzaBlock } from "../components/PizzaBlock";
 import { Skeleton } from "../components/PizzaBlock/Skeleton";
 import { Sort } from "../components/Sort";
 
-export const Home = () => {
+export const Home = (props) => {
+	const { searchValue } = props;
 	const [itemsPizza, setItemsPizza] = React.useState([]);
 	const [isLodging, setIsLodging] = React.useState(true);
 	const [isCategory, setIsCategory] = React.useState(0);
+	const [currentPage, setCurrentPage] = React.useState(1);
 	const [isSort, setIsSort] = React.useState({
 		name: "популярности",
 		sortProperty: "rating",
@@ -30,9 +33,10 @@ export const Home = () => {
 		const order = `${
 			isSort.sortProperty.includes("-") ? "&order=desc" : "&order=asc"
 		}`;
+		const search = `${searchValue ? `&search=${searchValue}` : ""}`;
 
 		fetch(
-			`https://62fe4b6ba85c52ee48347486.mockapi.io/items?${filter}${sortBy}${order}`,
+			`https://62fe4b6ba85c52ee48347486.mockapi.io/items?page=${currentPage}&limit=4${filter}${sortBy}${order}${search}`,
 			{
 				signal,
 			}
@@ -45,7 +49,15 @@ export const Home = () => {
 		return () => {
 			controller.abort();
 		};
-	}, [isCategory, isSort]);
+	}, [isCategory, isSort, searchValue, currentPage]);
+
+	const skeleton = [...new Array(6)].map((_, index) => (
+		<Skeleton key={index} />
+	));
+	const pizzas = itemsPizza.map((pizza) => (
+		<PizzaBlock key={pizza.id} {...pizza} />
+	));
+
 	return (
 		<>
 			<div className='content__top'>
@@ -59,11 +71,8 @@ export const Home = () => {
 				/>
 			</div>
 			<h2 className='content__title'>Все пиццы</h2>
-			<div className='content__items'>
-				{isLodging
-					? [...new Array(6)].map((_, index) => <Skeleton key={index} />)
-					: itemsPizza.map((pizza) => <PizzaBlock key={pizza.id} {...pizza} />)}
-			</div>
+			<div className='content__items'>{isLodging ? skeleton : pizzas}</div>
+			<Pagination onChangePage={(e) => setCurrentPage(e)} />
 		</>
 	);
 };
