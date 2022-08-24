@@ -1,4 +1,6 @@
 import React from "react";
+import { useSelector } from "react-redux";
+import { SearchContext } from "../App";
 import { Categories } from "../components/Categories";
 import { Pagination } from "../components/Pagination";
 import { PizzaBlock } from "../components/PizzaBlock";
@@ -6,10 +8,11 @@ import { Skeleton } from "../components/PizzaBlock/Skeleton";
 import { Sort } from "../components/Sort";
 
 export const Home = (props) => {
-	const { searchValue } = props;
+	const { searchValue } = React.useContext(SearchContext);
 	const [itemsPizza, setItemsPizza] = React.useState([]);
 	const [isLodging, setIsLodging] = React.useState(true);
-	const [isCategory, setIsCategory] = React.useState(0);
+	// const [isCategory, setIsCategory] = React.useState(0);
+	const categoryId = useSelector((state) => state.filterCategory.categoryId);
 	const [currentPage, setCurrentPage] = React.useState(1);
 	const [isSort, setIsSort] = React.useState({
 		name: "популярности",
@@ -24,7 +27,7 @@ export const Home = (props) => {
 		const controller = new AbortController();
 		const signal = controller.signal;
 
-		const filter = `${isCategory ? `category=${isCategory}` : ""}`;
+		const filter = `${categoryId ? `category=${categoryId}` : ""}`;
 		const sortBy = `${
 			isSort.sortProperty.replace("-", "")
 				? `&sortBy=${isSort.sortProperty}`
@@ -49,7 +52,7 @@ export const Home = (props) => {
 		return () => {
 			controller.abort();
 		};
-	}, [isCategory, isSort, searchValue, currentPage]);
+	}, [categoryId, isSort, searchValue, currentPage]);
 
 	const skeleton = [...new Array(6)].map((_, index) => (
 		<Skeleton key={index} />
@@ -61,10 +64,7 @@ export const Home = (props) => {
 	return (
 		<>
 			<div className='content__top'>
-				<Categories
-					id={isCategory}
-					onClickCategory={(id) => setIsCategory(id)}
-				/>
+				<Categories />
 				<Sort
 					sortName={isSort.name}
 					onClickSort={(objSort) => setIsSort(objSort)}

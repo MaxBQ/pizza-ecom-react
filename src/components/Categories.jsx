@@ -1,7 +1,11 @@
 import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { filterCategories } from "../redux/searchCategorySlice";
 
 export const Categories = (props) => {
-	const { id, onClickCategory } = props;
+	// const { id, onClickCategory } = props;
+	const id = useSelector((state) => state.filterCategory.categoryId);
+	const dispatch = useDispatch();
 
 	const categories = [
 		"Все",
@@ -17,7 +21,7 @@ export const Categories = (props) => {
 			<ul>
 				{categories.map((category, index) => (
 					<li
-						onClick={() => onClickCategory(index)}
+						onClick={() => dispatch(filterCategories(index))}
 						className={id === index ? "active" : ""}
 						key={index}
 					>

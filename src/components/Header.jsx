@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import { Search } from "./Search";
 
 export const Header = (props) => {
-	const { searchValue, setSearchValue } = props;
 	return (
 		<div className='header'>
 			<div className='container'>
@@ -13,7 +12,7 @@ export const Header = (props) => {
 						<p>самая вкусная пицца во вселенной</p>
 					</div>
 				</Link>
-				<Search searchValue={searchValue} setSearchValue={setSearchValue} />
+				<Search />
 				<div className='header__cart'>
 					<Link to='/cart' className='button button--cart'>
 						<span>520 ₽</span>
