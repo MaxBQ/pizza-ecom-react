@@ -1,8 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
-import searchCategoryReducer from "./searchCategorySlice";
+import filterReducer from "./slice/filterSlice";
 
 export const store = configureStore({
 	reducer: {
-		filterCategory: searchCategoryReducer,
+		filter: filterReducer,
 	},
 });

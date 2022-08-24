@@ -8,16 +8,11 @@ import { Skeleton } from "../components/PizzaBlock/Skeleton";
 import { Sort } from "../components/Sort";
 
 export const Home = (props) => {
+	const { categoryId, sort } = useSelector((state) => state.filter);
 	const { searchValue } = React.useContext(SearchContext);
 	const [itemsPizza, setItemsPizza] = React.useState([]);
 	const [isLodging, setIsLodging] = React.useState(true);
-	// const [isCategory, setIsCategory] = React.useState(0);
-	const categoryId = useSelector((state) => state.filterCategory.categoryId);
 	const [currentPage, setCurrentPage] = React.useState(1);
-	const [isSort, setIsSort] = React.useState({
-		name: "популярности",
-		sortProperty: "rating",
-	});
 
 	React.useEffect(() => {
 		setIsLodging(true);
@@ -27,14 +22,12 @@ export const Home = (props) => {
 		const controller = new AbortController();
 		const signal = controller.signal;
 
-		const filter = `${categoryId ? `category=${categoryId}` : ""}`;
+		const filter = `${categoryId ? `&category=${categoryId}` : ""}`;
 		const sortBy = `${
-			isSort.sortProperty.replace("-", "")
-				? `&sortBy=${isSort.sortProperty}`
-				: ""
+			sort.sortProperty.replace("-", "") ? `&sortBy=${sort.sortProperty}` : ""
 		}`;
 		const order = `${
-			isSort.sortProperty.includes("-") ? "&order=desc" : "&order=asc"
+			sort.sortProperty.includes("-") ? "&order=desc" : "&order=asc"
 		}`;
 		const search = `${searchValue ? `&search=${searchValue}` : ""}`;
 
@@ -52,7 +45,7 @@ export const Home = (props) => {
 		return () => {
 			controller.abort();
 		};
-	}, [categoryId, isSort, searchValue, currentPage]);
+	}, [categoryId, sort, searchValue, currentPage]);
 
 	const skeleton = [...new Array(6)].map((_, index) => (
 		<Skeleton key={index} />
@@ -65,10 +58,7 @@ export const Home = (props) => {
 		<>
 			<div className='content__top'>
 				<Categories />
-				<Sort
-					sortName={isSort.name}
-					onClickSort={(objSort) => setIsSort(objSort)}
-				/>
+				<Sort />
 			</div>
 			<h2 className='content__title'>Все пиццы</h2>
 			<div className='content__items'>{isLodging ? skeleton : pizzas}</div>

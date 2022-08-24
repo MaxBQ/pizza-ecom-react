@@ -1,7 +1,10 @@
 import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { setSort } from "../redux/slice/filterSlice";
 
 export const Sort = (props) => {
-	const { sortName, onClickSort } = props;
+	const sortName = useSelector((state) => state.filter.sort.name);
+	const dispatch = useDispatch();
 	const [isOpen, setIsOpen] = React.useState(false);
 
 	const sortLists = [
@@ -14,8 +17,8 @@ export const Sort = (props) => {
 	];
 	// const sortName = sortLists[activeList];
 
-	const onClickSelectedList = (index) => () => {
-		onClickSort(index);
+	const onClickSelectedList = (obj) => () => {
+		dispatch(setSort(obj));
 		setIsOpen(false);
 	};
 

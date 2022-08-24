@@ -1,10 +1,9 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { filterCategories } from "../redux/searchCategorySlice";
+import { filterCategories } from "../redux/slice/filterSlice";
 
 export const Categories = (props) => {
-	// const { id, onClickCategory } = props;
-	const id = useSelector((state) => state.filterCategory.categoryId);
+	const id = useSelector((state) => state.filter.categoryId);
 	const dispatch = useDispatch();
 
 	const categories = [
