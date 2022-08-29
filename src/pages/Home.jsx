@@ -1,4 +1,5 @@
 import React from "react";
+import axios from "axios";
 import { useSelector } from "react-redux";
 import { SearchContext } from "../App";
 import { Categories } from "../components/Categories";
@@ -8,11 +9,12 @@ import { Skeleton } from "../components/PizzaBlock/Skeleton";
 import { Sort } from "../components/Sort";
 
 export const Home = (props) => {
-	const { categoryId, sort } = useSelector((state) => state.filter);
+	const { categoryId, sort, currentPage } = useSelector(
+		(state) => state.filter
+	);
 	const { searchValue } = React.useContext(SearchContext);
 	const [itemsPizza, setItemsPizza] = React.useState([]);
 	const [isLodging, setIsLodging] = React.useState(true);
-	const [currentPage, setCurrentPage] = React.useState(1);
 
 	React.useEffect(() => {
 		setIsLodging(true);
@@ -31,13 +33,14 @@ export const Home = (props) => {
 		}`;
 		const search = `${searchValue ? `&search=${searchValue}` : ""}`;
 
-		fetch(
-			`https://62fe4b6ba85c52ee48347486.mockapi.io/items?page=${currentPage}&limit=4${filter}${sortBy}${order}${search}`,
-			{
-				signal,
-			}
-		)
-			.then((res) => res.json())
+		axios
+			.get(
+				`https://62fe4b6ba85c52ee48347486.mockapi.io/items?page=${currentPage}&limit=4${filter}${sortBy}${order}${search}`,
+				{
+					signal,
+				}
+			)
+			.then((res) => res.data)
 			.then((pizzas) => {
 				setItemsPizza(pizzas);
 				setIsLodging(false);
@@ -62,7 +65,7 @@ export const Home = (props) => {
 			</div>
 			<h2 className='content__title'>Все пиццы</h2>
 			<div className='content__items'>{isLodging ? skeleton : pizzas}</div>
-			<Pagination onChangePage={(e) => setCurrentPage(e)} />
+			<Pagination />
 		</>
 	);
 };
